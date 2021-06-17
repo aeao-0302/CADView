@@ -7,18 +7,15 @@ using Xamarin.Forms.Maps;
 
 namespace CADView
 {
-   using Map = Xamarin.Forms.Maps.Map;
-  public class MapPage : ContentPage
+    using Map = Xamarin.Forms.Maps.Map;
+    public class MapPage : ContentPage
     {
-       Map customMap;
-       
-        Pin pinPnt;
-        Polyline pline;
-
-    public MapPage() 
+        Map customMap;
+        
+        public MapPage()
         {
 
-            customMap = new  Xamarin.Forms.Maps.Map
+            customMap = new Xamarin.Forms.Maps.Map
             {
                 MapType = MapType.Street
                 //map.MapType = GoogleMap.MapTypeTerrain;   //.MapTypeHybrid;
@@ -35,7 +32,7 @@ namespace CADView
 
             Content = new StackLayout
             {
-                Children = 
+                Children =
                 {
                     customMap, btn
                 }
@@ -50,7 +47,7 @@ namespace CADView
             var status = await Permissions.RequestAsync<Permissions.StorageRead>();
             if (status == PermissionStatus.Denied) return;
 
-            var  file = await FilePicker.PickAsync();
+            var file = await FilePicker.PickAsync();
             if (file == null) return;
 
             string[] PTypeStr = {"Астрономическа точка","Триангулачна точка на терена",
@@ -95,21 +92,20 @@ namespace CADView
                     //customMap.CustomPLines = new List<Polyline> ();
                     for (int i = 0; i < cadL[j].ln.Count; i++)                  // List of lines
                     {
-                        pline = new Polyline();
+                        Polyline pline = new Polyline();
                         pline.Geopath.Clear();
                         pline.StrokeColor = Color.Blue;
                         pline.StrokeWidth = 4;
-                        
+
                         for (int k = 0; k < cadL[j].ln[i].l.Count; k++)         // List of vertex
                         {
                             //pline.Positions.Add(new Position(cadL[j].ln[i].l[k].x, cadL[j].ln[i].l[k].y));
                             pline.Geopath.Add(new Position(cadL[j].ln[i].l[k].x, cadL[j].ln[i].l[k].y));
-                            
                         }
                         customMap.MapElements.Add(pline);
                         //customMap.CustomPLines.Add(pline);                        
                     }
-                    if (cadL[j].ln.Count >0)
+                    if (cadL[j].ln.Count > 0)
                         customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(cadL[j].ln[0].l[0].x, cadL[j].ln[0].l[0].y), Distance.FromMeters(1000.0)));
                 }
 

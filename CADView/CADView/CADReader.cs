@@ -108,22 +108,17 @@ namespace CADView
                 string ln;
                 string[] words;
 
-                GeoPoint ppnt;// = new GEOPoint();
-
-                Vertex vpnt; // = new vertex();
-                GeoLine gln;// = new GEOLine();
-                
                 CadLayer cLyr;// = new CADFile();
                 cLyr = new CadLayer();
                 cLyr.layer = "Cadastre";
 
                 gPoint = new List<GeoPoint>();
                 int j = 0;
-                foreach (int i in pntList )
+                foreach (int i in pntList)
                 {
-                    ppnt = new GeoPoint();
+                    GeoPoint ppnt = new GeoPoint();
                     ppnt.t = 1;                             // Type of points
-                    ppnt.n = (ulong) i;         
+                    ppnt.n = (ulong)i;
                     ppnt.x = pntList[j];
                     ppnt.y = pntList[j + 1];
                     ppnt.h = 0;
@@ -132,34 +127,38 @@ namespace CADView
                     j = j + 2;
                     if (j >= pntList.Length) break;
                 }
-                    lVertex = new List<Vertex>();
-                    lLine = new List<GeoLine>();
+                
+                lLine = new List<GeoLine>();
 
                 while (!sr.EndOfStream)                     // Do EOF
                 {
-                    lVertex.Clear();
-                    gln = new GeoLine();
-                    while (!sr.EndOfStream)   
+                    List<Vertex> lVertex = new List<Vertex>();
+                    GeoLine gln = new GeoLine();
+                   
+                    while (!sr.EndOfStream)
                     {
                         ln = sr.ReadLine();
-                        if (ln.Trim().Length < 1) continue;
+                        if (ln.Trim().Length < 1)
+                            continue;
+                        
                         words = ln.Split(delimiterChars, System.StringSplitOptions.RemoveEmptyEntries);
-                        if (words[0] == "999" && words[1] == "999") break;
-                        vpnt = new Vertex();
-                        vpnt.x =Convert.ToDouble(words[0]);   // vertex
+                        if (words[0] == "999" && words[1] == "999") 
+                            break;
+                        
+                        Vertex vpnt = new Vertex();
+                        vpnt.x = Convert.ToDouble(words[0]);   // vertex
                         vpnt.y = Convert.ToDouble(words[1]);
                         lVertex.Add(vpnt);                          // vertex of line
-
                     }
                     gln.l = lVertex;
                     lLine.Add(gln);                             // List of line
                 }                                                                      // EOF
                 cLyr.pnt = gPoint;
-                        
+
                 cLyr.ln = lLine;
-                                   
+
                 cadL.Add(cLyr);
-                           
+
                 sr.Close();                                            // Close file              
 
                 return true;
