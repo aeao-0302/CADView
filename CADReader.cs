@@ -137,7 +137,7 @@ namespace CADView
 
                 while (!sr.EndOfStream)                     // Do EOF
                 {
-                    lVertex.Clear();
+                    lVertex = new List<Vertex>();           // lVertex.Clear(); this is error!!!, clear list but referens to firs line, show 1 line
                     gln = new GeoLine();
                     while (!sr.EndOfStream)   
                     {
